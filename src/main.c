@@ -1,29 +1,37 @@
 #include "raylib.h"
 
+#define RIGHT 3
+#define DOWN 6
+#define LEFT 9
+#define UP 12
+
+#define HEAD 2
+#define BODY 1
+#define APPLE -1
+
+
 int main(void)
 {
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int boardWidth = 10
+    const int boardHeight = 10 
 
-    InitWindow(screenWidth, screenHeight, "Moving ball");
+    int board[boardWidth][boardHeight] = {};
 
-    Vector2 ballPosition = { (float)screenWidth/2, (float)screenHeight/2 };
+    const short screenWidth = boardWidth*40;
+    const short screenHeight = boardHeight*40;
 
-    SetTargetFPS(60);
+    InitWindow(screenWidth, screenHeight, "Serpens");
 
+    SetTargetFPS(120);
+    
     while (!WindowShouldClose())
     {
-        if (IsKeyDown(KEY_RIGHT)) ballPosition.x += 4.0f;
-        if (IsKeyDown(KEY_LEFT)) ballPosition.x -= 4.0f;
-        if (IsKeyDown(KEY_UP)) ballPosition.y -= 4.0f;
-        if (IsKeyDown(KEY_DOWN)) ballPosition.y += 4.0f;
-
-        
+      
         BeginDrawing();
 
           ClearBackground(RAYWHITE);
 
-          DrawCircleV(ballPosition, 75, RED);
+          DrawRectangle(headPosition.x , headPosition.y , 40, 40, BLACK);
         
         EndDrawing();
       }
