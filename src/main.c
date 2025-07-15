@@ -13,6 +13,8 @@
 #define APPLE -1
 #define EMPTY 0
 
+#define SQUARE 20.0f
+
 typedef struct Node {
   int x;
   int y;
@@ -27,7 +29,7 @@ typedef struct Snake {
 } Snake;
 
 
-void add_to_front(Snake* snake, int x, int y) {
+void add_to_back(Snake* snake, int x, int y) {
   Node* newNode = (Node*)malloc(sizeof(Node));
   
   newNode->x = x;
@@ -43,7 +45,7 @@ void add_to_front(Snake* snake, int x, int y) {
     
 }
 
-void init_snake(Snake* snake, int board[10][10]) {
+void init_snake(Snake* snake, int board[12][12]) {
 // here should be function choosing start
   board[5][4] = HEAD;
  // board[4][4] = BODY;
@@ -51,7 +53,7 @@ void init_snake(Snake* snake, int board[10][10]) {
   snake->direction = 3;
 
  // add_to_front(snake, 4, 4);
-  add_to_front(snake, 5, 4);
+  add_to_back(snake, 5, 4);
 //  
 }
 
@@ -63,28 +65,28 @@ void remove_back(Snake* snake) {
 
 int main(void)
 {
-    const int boardWidth = 10;
-    const int boardHeight = 10;
+    const int boardWidth = 12;
+    const int boardHeight = 12;
 
     int board[boardWidth][boardHeight] = {};
 
-    const int screenWidth = boardWidth*40;
-    const int screenHeight = boardHeight*40;
+    const int screenWidth = boardWidth*SQUARE;
+    const int screenHeight = boardHeight*SQUARE;
 
     InitWindow(screenWidth, screenHeight, "Serpens");
 
     SetTargetFPS(120);
     
-    Vector2 position = { 5 * 40.0f, 4 * 40.0f };
+    Vector2 position = { 5 * SQUARE, 4 * SQUARE };
     
-    Snake* snake;
+    Snake* snake = (Snake*)malloc(sizeof(Snake));
     
     init_snake(snake, board);
     
     int iter = 0;
     while (!WindowShouldClose())
     {
-        usleep(10000);
+        usleep(6000);
         iter++;
         
         if (IsKeyDown(KEY_RIGHT)) snake->direction = RIGHT;
@@ -92,23 +94,33 @@ int main(void)
         if (IsKeyDown(KEY_UP)) snake->direction = UP;
         if (IsKeyDown(KEY_DOWN)) snake->direction = DOWN;
       
-        if(iter == 100) {
+        if(iter == 72) {
           iter = 0;
           if(snake->direction == RIGHT)
-            position.x += 40.0f;
+            position.x += SQUARE;
           if(snake->direction == LEFT)
-            position.x += -40.0f;
+            position.x += -SQUARE;
           if(snake->direction == UP)
-            position.y += 40.0f;
+            position.y += -SQUARE;
           if(snake->direction == DOWN)
-            position.y += -40.0f;
+            position.y += SQUARE;
+            
+          position.x = ((int)position.x)%((int)SQUARE*boardWidth);
+          position.y = ((int)position.y)%((int)SQUARE*boardHeight);
+          
+         
         }
+         if(position.x < 0)
+            position.x = (boardWidth-1)*SQUARE;
+            
+          if(position.y < 0)
+            position.y = (boardHeight-1)*SQUARE;
       
         BeginDrawing();
 
           ClearBackground(RAYWHITE);
 
-          DrawRectangle(position.x , position.y , 40, 40, BLACK);
+          DrawRectangle(position.x , position.y , SQUARE, SQUARE, BLACK);
         
         EndDrawing();
       }
